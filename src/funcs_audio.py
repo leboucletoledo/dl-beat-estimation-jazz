@@ -5,7 +5,10 @@ from librosa import clicks
 from IPython.display import Audio, display
 from scipy.io import wavfile
 
-def play_audio(waveform, sample_rate):
+from funcs_misc import is_notebook
+
+def play_audio(waveform, sample_rate: int) -> None:
+  assert is_notebook(), 'Function only intended for Jupyter notebook'
   if waveform.ndim == 1:
     display(Audio(waveform, rate=sample_rate))
   elif waveform.ndim == 2:
@@ -18,7 +21,7 @@ def get_audio_clicks(dataset,
                      idx: int=None, 
                      seed: int=None, 
                      x_lims: list=[], 
-                     verbose=False
+                     verbose: bool=False,
                      ):
     
     def match_click_size(audio: np.array, 
@@ -48,8 +51,8 @@ def get_audio_clicks(dataset,
     
     audio, sr = dataset.get_audio(idx)
     dnbt_preds = dataset.data[idx][pred_type]
-    bt_indices = np.argwhere(dnbt_preds[:,1]!=1.0)[:,0]
-    dnbt_indices = np.argwhere(dnbt_preds[:,1]==1.0)[:,0]
+    bt_indices = np.argwhere(dnbt_preds[:,1]!=1)[:,0]
+    dnbt_indices = np.argwhere(dnbt_preds[:,1]==1)[:,0]
     
     bt_preds = dnbt_preds[bt_indices][:,0]#.astype('float32')
     dnbt_preds = dnbt_preds[dnbt_indices][:,0]#.astype('float32')
@@ -90,7 +93,7 @@ def export_audio_clicks(audio_clicks: np.ndarray,
                         name_suffix: str='',
                         output_dir: str='./output/',
                         norm_16int: bool=True,
-                        ):
+                        ) -> None:
     
     def normalize_float_to_16int(waveform: np.ndarray):
         waveform_norm = 2 * (waveform - np.amin(waveform)) / (np.amax(waveform) - np.amin(waveform)) - 1

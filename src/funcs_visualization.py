@@ -21,6 +21,12 @@ COLORS = ['royalblue',
           'violet',
           ]
 
+LABELS = {'bt_ann': 'Beat annotations',
+          'bt_pred': 'Beat predictions',
+          'dnbt_ann': 'Downbeat annotations',
+          'dnbt_pred': 'Downbeat predictions',
+          }
+
 plt.rcParams.update(PARAMS)
 
 def get_spectrogram(waveform, 
@@ -64,40 +70,41 @@ def get_spectrogram(waveform,
                   hop_length * 2, 
                   sr / 2, 
                   color=color, 
-                  label='Downbeat annotations')
+                  label=LABELS['dnbt_ann'],
+                  )
         ax.vlines(bt_annotations, 
                   hop_length * 2, 
                   sr / 2, 
                   linestyles='dotted', 
                   color=color, 
-                  label='Beat annotations',
+                  label=LABELS['bt_ann'],
                   )
         ax.vlines(dnbt_predictions, 
                   0, 
                   hop_length, 
                   color='m', 
-                  label='Downbeat predictions',
+                  label=LABELS['dnbt_pred'],
                   )
         ax.vlines(bt_predictions, 
                   0, 
                   hop_length, 
                   linestyles='dotted', 
                   color='m', 
-                  label='Beat predictions',
+                  label=LABELS['bt_pred'],
                   )
     elif dnbt_annotations is not None:
         ax.vlines(dnbt_annotations, 
                   0, 
                   sr / 2, 
                   color=color, 
-                  label='Downbeat annotations',
+                  label=LABELS['dnbt_ann'],
                   )
         ax.vlines(bt_annotations, 
                   0, 
                   sr / 2, 
                   linestyles='dotted', 
                   color=color, 
-                  label='Beat annotations',
+                  label=LABELS['bt_ann'],
                   )
     else:
         ax.vlines(bt_annotations, 
@@ -105,7 +112,7 @@ def get_spectrogram(waveform,
                   sr / 2, 
                   linestyles='dotted', 
                   color=color, 
-                  label='Beat annotations',
+                  label=LABELS['bt_ann'],
                   )
     
     if x_lims:

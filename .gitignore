@@ -1,0 +1,10 @@
+# Ignore irrelevant folders
+.ipynb_checkpoints/
+dataset/
+
+# Ignore specific files
+/*.py
+/*.ipynb
+
+# Force tracking
+# !models.py

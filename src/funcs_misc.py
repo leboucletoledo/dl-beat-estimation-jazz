@@ -6,7 +6,7 @@ from torch import jit, from_numpy
 # Import network architecture from models.py
 from models import BeatTrackerModel
 
-def fullprint(*args, **kwargs):
+def fullprint(*args, **kwargs) -> None:
     from pprint import pprint
     import numpy
     opt = numpy.get_printoptions()
@@ -14,7 +14,7 @@ def fullprint(*args, **kwargs):
     pprint(*args, **kwargs)
     numpy.set_printoptions(**opt)
 
-def count_parameters(model):
+def count_parameters(model) -> int:
     table = PrettyTable(["Modules", "Parameters"])
     total_params = 0
     for name, parameter in model.named_parameters():
@@ -27,7 +27,6 @@ def count_parameters(model):
     print(f"Total Trainable Params: {total_params}")
     return total_params
 
-# TODO: add device as argument
 def print_network_architecture(dataset,
                                model_layers,
                                show_width_expansion=False, 
@@ -35,7 +34,7 @@ def print_network_architecture(dataset,
                                export_graph=False, 
                                seed=None,
                                device=None,
-                               ):
+                               ) -> None:
     if seed:
         random.seed(seed)
     rand = random.randint(0, len(dataset))
@@ -75,3 +74,16 @@ def print_network_architecture(dataset,
 
         # Save the TorchScript model
         traced_script_module.save(f'traced_beattrackermodel_layers{model_layers}.pt')
+
+def is_notebook() -> bool:
+    try:
+        from IPython import get_ipython
+        shell = get_ipython().__class__.__name__
+        if shell == 'ZMQInteractiveShell':
+            return True   # Jupyter notebook or qtconsole
+        elif shell == 'TerminalInteractiveShell':
+            return False  # Terminal running IPython
+        else:
+            return False  # Other type (?)
+    except NameError:
+        return False      # Probably standard Python interpreter
